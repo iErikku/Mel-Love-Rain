@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Rain</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: black;
+      color: violet;
+      font-family: Arial, sans-serif;
+      position: relative;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h1 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: violet;
+      font-size: 3rem;
+      z-index: 2;
+    }
+
+    .love {
+      position: absolute;
+      top: -50px;
+      color: violet;
+      animation: fall 5s linear infinite;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    .explosion {
+      position: absolute;
+      color: violet;
+      font-size: 1.2rem;
+      opacity: 1;
+      animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+      to {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>MEL X ERICK <3</h1>
+
+  <script>
+    const createLove = () => {
+      const love = document.createElement('div');
+      love.classList.add('love');
+      love.textContent = 'I love you';
+      love.style.left = Math.random() * window.innerWidth + 'px';
+      love.style.fontSize = (Math.random() * 10 + 10) + 'px';
+      love.style.animationDuration = (Math.random() * 3 + 3) + 's';
+      document.body.appendChild(love);
+      setTimeout(() => love.remove(), 8000);
+    };
+
+    setInterval(createLove, 200);
+
+    const createExplosion = (x, y) => {
+      for (let i = 0; i < 30; i++) {
+        const word = document.createElement('div');
+        word.classList.add('explosion');
+        word.textContent = 'I love you';
+        word.style.left = x + 'px';
+        word.style.top = y + 'px';
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 150;
+        const offsetX = Math.cos(angle) * distance;
+        const offsetY = Math.sin(angle) * distance;
+        word.style.setProperty('--x', `${offsetX}px`);
+        word.style.setProperty('--y', `${offsetY}px`);
+        document.body.appendChild(word);
+        setTimeout(() => word.remove(), 1000);
+      }
+    };
+
+    document.body.addEventListener('click', (e) => {
+      createExplosion(e.clientX, e.clientY);
+    });
+
+    document.body.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      createExplosion(touch.clientX, touch.clientY);
+    });
+  </script>
+
+</body>
+</html>
