@@ -4,97 +4,91 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Love Rain</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background-color: black;
-      color: violet;
-      font-family: Arial, sans-serif;
-      position: relative;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    background-color: black;
+    color: violet;
+    font-family: Arial, sans-serif;
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
+  h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: violet;
+    font-size: 3rem;
+    z-index: 2;
+  }
+
+  .love {
+    position: absolute;
+    color: violet;
+    user-select: none;
+    font-family: 'Arial Black', Impact, sans-serif;
+    font-weight: bold;
+    border-radius: 5px;
+    pointer-events: none;
+    opacity: 0.8;
+    animation: fall linear forwards;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(120vh);
+      opacity: 0;
+    }
+  }
+
+  .explosion {
+    position: absolute;
+    color: violet;
+    font-size: 1.2rem;
+    opacity: 1;
+    animation: explode 1s ease-out forwards;
+  }
+
+  @keyframes explode {
+    to {
+      transform: translate(var(--x), var(--y));
+      opacity: 0;
+    }
+  }
+
+  /* Responsive para móviles */
+  @media (max-width: 600px) {
     h1 {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: violet;
-      font-size: 3rem;
-      z-index: 2;
+      font-size: 2rem;
     }
-
     .love {
-      position: absolute;
-      color: violet;
-      user-select: none;
-      font-family: 'Arial Black', Impact, sans-serif;
-      font-weight: bold;
-      border-radius: 5px;
-      pointer-events: none;
-      opacity: 0.8;
-      animation: fall linear forwards;
+      font-size: 12px !important;
     }
-
-    .love.ghost1 { opacity: 0.6; top: -20px; }
-    .love.ghost2 { opacity: 0.4; top: -40px; }
-    .love.ghost3 { opacity: 0.2; top: -60px; }
-
-    @keyframes fall {
-      to {
-        transform: translateY(120vh);
-        opacity: 0;
-      }
-    }
-
     .explosion {
-      position: absolute;
-      color: violet;
-      font-size: 1.2rem;
-      opacity: 1;
-      animation: explode 1s ease-out forwards;
+      font-size: 0.8rem;
     }
-
-    @keyframes explode {
-      to {
-        transform: translate(var(--x), var(--y));
-        opacity: 0;
-      }
-    }
-
-    /* Responsive para móviles */
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2rem;
-      }
-
-      .love {
-        font-size: 12px !important;
-      }
-
-      .explosion {
-        font-size: 0.8rem;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
 
-  <h1>Mel X Erick ❤️</h1>
+<h1>Mel x Erick ❤️</h1>
 
-  <script>
-const createLove = () => {
+<script>
+  // I LOVE YOU con ghost
+  const createLove = () => {
     const baseLeft = Math.random() * window.innerWidth;
     const baseSize = Math.random() * 10 + 10;
-    const baseDuration = (Math.random() * 1 + 2); // Mucho más rápido: entre 0.5 y 1s
-
-    const numGhosts = 10; // Número de capas para el ghosting
-    const ghostSpacing = 10; // Separación entre cada ghost (más pegadas)
-    const baseOpacity = 0.8; // Opacidad inicial de la capa principal
+    const baseDuration = (Math.random() * 1 + 2);
+    const numGhosts = 10;
+    const ghostSpacing = 10;
+    const baseOpacity = 0.8;
 
     for (let i = 0; i < numGhosts; i++) {
       const love = document.createElement('div');
@@ -103,20 +97,40 @@ const createLove = () => {
       love.style.left = baseLeft + 'px';
       love.style.top = (-50 - i * ghostSpacing) + 'px';
       love.style.fontSize = baseSize + 'px';
-      love.style.opacity = baseOpacity - (i * 0.07); // Opacidad va bajando por cada ghost
+      love.style.opacity = Math.max(0, baseOpacity - (i * 0.07));
       love.style.animationDuration = baseDuration + 's';
       document.body.appendChild(love);
       setTimeout(() => love.remove(), baseDuration * 1000 + 1000);
     }
   };
 
-  setInterval(createLove, 150); // Más frecuente para que llueva más
+  // Corazones y estrellas SIN ghost (solo 1 por vez)
+  const createSingleFallingItem = (text) => {
+    const baseLeft = Math.random() * window.innerWidth;
+    const baseSize = Math.random() * 10 + 10;
+    const baseDuration = (Math.random() * 1 + 2);
+
+    const item = document.createElement('div');
+    item.classList.add('love');
+    item.textContent = text;
+    item.style.left = baseLeft + 'px';
+    item.style.top = '-50px';
+    item.style.fontSize = baseSize + 'px';
+    item.style.opacity = 0.8;
+    item.style.animationDuration = baseDuration + 's';
+    document.body.appendChild(item);
+    setTimeout(() => item.remove(), baseDuration * 1000 + 1000);
+  };
+
+  setInterval(createLove, 150);               // Texto con ghost
+  setInterval(() => createSingleFallingItem('❤️'), 250);  // Corazones
+  setInterval(() => createSingleFallingItem('🌟'), 300);  // Estrellas
 
   const createExplosion = (x, y) => {
     for (let i = 0; i < 30; i++) {
       const word = document.createElement('div');
       word.classList.add('explosion');
-      word.textContent = 'I love you';
+      word.textContent = ['I LOVE YOU', '❤️', '🌟'][Math.floor(Math.random() * 3)];
       word.style.left = x + 'px';
       word.style.top = y + 'px';
       const angle = Math.random() * 2 * Math.PI;
@@ -138,7 +152,7 @@ const createLove = () => {
     const touch = e.touches[0];
     createExplosion(touch.clientX, touch.clientY);
   });
-  </script>
+</script>
 
 </body>
 </html>
